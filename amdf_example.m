@@ -5,10 +5,11 @@ filesize = length(y);
 blocksize = 2048;
 hopsize = 1024;
 
+hops = (filesize-blocksize)/hopsize-2;
+
 period = zeros(hops, 1);
 freq = zeros(hops, 1);
 midi = zeros(hops, 1);
-hops = (filesize-blocksize)/hopsize-2;
 
 AMDF = zeros(blocksize-1,hops);
 
