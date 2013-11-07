@@ -1,4 +1,6 @@
-[y,Fs] = wavread('sax.wav');
+[y,Fs] = wavread('AdeleBass.wav');
+
+y = y(:, 1);
 
 filesize = length(y);
 
