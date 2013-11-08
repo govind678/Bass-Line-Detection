@@ -1,4 +1,4 @@
-[y,Fs] = wavread('AdeleBass.wav');
+[y,Fs] = wavread('test.wav');
 
 y = y(:, 1);
 
