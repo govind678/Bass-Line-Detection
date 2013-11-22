@@ -23,6 +23,8 @@ pitches = [220
 392
 415.3];
 
+pitches = pitches/4;
+
 limits = [pitches*2^(-1/24) pitches pitches*2^(1/24)];
 
 bins = 0:Fs1/(nyquist-1):Fs1/2;
@@ -42,7 +44,13 @@ for i = 1:12
     filter(i, idx) = 1/length(idx);
     
     idx = find((bins > 8*limits(i, 1)) & (bins < 8*limits(i, 3)));
-    filter(i, idx) = 1/length(idx);    
+    filter(i, idx) = 1/length(idx);
+    
+    idx = find((bins > 16*limits(i, 1)) & (bins < 16*limits(i, 3)));
+    filter(i, idx) = 1/length(idx);
+    
+    idx = find((bins > 32*limits(i, 1)) & (bins < 32*limits(i, 3)));
+    filter(i, idx) = 1/length(idx);
 end
 
 while n <= nSamples-blockSize

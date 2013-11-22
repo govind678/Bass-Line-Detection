@@ -5,11 +5,11 @@ hopSize = 512;
 
 Fc = 247;
 
-[y,Fs] = wavread('Rolling.wav');
-y = y(42*Fs:51*Fs,1);
+[y,Fs] = wavread('Adele.wav');
+y = y(40*Fs:49*Fs,1);
 
 
-[b,a] = butter(8,2*pi*(Fc/Fs),'low');
+[b,a] = butter(2,(Fc/Fs),'low');
 filt1 = filter(b,a,y);
 
 filt2 = filter(b,a,filt1);
@@ -26,11 +26,24 @@ nSamples = length(y);
 kLPF = 0.1;
 detect = detectionFunction(stft,blockSize,kLPF);
 
-delta = 0.1;
+delta = 0.3;
 lambda = 0.85;
-window = ceil((230/1000) * (Fs/hopSize));      % 80 ms window
+window = ceil((250/1000) * (Fs/hopSize)); % 80 ms window
 
 onsetsK = thresholdFunction(detect,delta,lambda,window);
+
+onsetTimes = find(onsetsK == 1);
+
+
+audio = zeros(16384,length(onsetTimes));
+
+for i=1:length(onsetTimes);
+  audio(:,i) = y(onsetTimes(i) : onsetTimes(i) + 16384 - 1);
+  amdf_example(audio(:,i),Fs);
+end
+   
+
+
 
 
 % Zero Crossing Rate
@@ -38,13 +51,13 @@ onsetsK = thresholdFunction(detect,delta,lambda,window);
 % zcr = zeros(size(stft,2),1);
 % index = 1;
 % for n=1:hopSize:nSamples-blockSize
-%     zcSum = 0;
-%     for i=n+1:n+blockSize
-%         sig = abs(sign(y(i))-sign(y(i-1)));
-%         zcSum = zcSum + sig;
-%     end
-%     zcr(index) = zcSum/(2*blockSize);
-%     index = index+1;
+% zcSum = 0;
+% for i=n+1:n+blockSize
+% sig = abs(sign(y(i))-sign(y(i-1)));
+% zcSum = zcSum + sig;
+% end
+% zcr(index) = zcSum/(2*blockSize);
+% index = index+1;
 % end
 
 
@@ -54,3 +67,4 @@ onsetsK = thresholdFunction(detect,delta,lambda,window);
 % hold on
 % plot(detect,'b');
 % stem(onsetsK,'r');
+
