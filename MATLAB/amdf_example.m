@@ -1,4 +1,6 @@
-[y,Fs] = wavread('test.wav');
+function amdf_example(y, Fs)
+
+% [y,Fs] = wavread(filename);
 
 y = y(:, 1);
 
@@ -7,7 +9,7 @@ filesize = length(y);
 blocksize = 2048;
 hopsize = 1024;
 
-hops = (filesize-blocksize)/hopsize-2;
+hops = floor((filesize-blocksize)/hopsize) - 1;
 
 period = zeros(hops, 1);
 freq = zeros(hops, 1);
@@ -21,12 +23,15 @@ for i = 0 : hops - 1
 
     AMDF(:,i+1) = amdf(y(start : endpoint));
     
-    [Val, period(i+1)] = min(AMDF(10:end,i+1));
+    [Val, period(i+1)] = min(AMDF(35:end,i+1));
     
     freq(i+1) = Fs/period(i+1);
     
     midi(i+1) = 69 + 12*log2(freq(i+1)/440);
 end
 
+figure;
 plot(midi);
 % imagesc(AMDF);
+
+end
