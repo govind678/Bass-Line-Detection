@@ -1,0 +1,26 @@
+function [ output_args ] = instantaneousFrequency( X, Fs )
+
+
+realSTFT = abs(X);
+imgSTFT  = unwrap(angle(X));
+
+nBins = size(X,1);
+nBlocks = size(X,2);
+
+instantFreq = zeros(nBins,nBlocks);
+for t = 2:nBlocks
+    for w = 1:nBins
+        a = realSTFT(w,t);
+        b = imgSTFT(w,t);
+        aD = realSTFT(w,t-1);
+        bD = imgSTFT(w,t-1);
+        
+        instantFreq(w,t) = w + (a * (b -imgSTFT(w,t-1))) - (imgSTFT(w,t) * (realSTFT(w,t)-realSTFT(w,t-1))) / (realSTFT();
+        
+% instantFreq = diff(phase) / diff(t) / (2*pi);
+% instantAmp  = abs(X);
+        
+
+
+end
+
