@@ -17,15 +17,19 @@ if(plot == 1)
     figure();
     Freq = 0:Fs/blockSize:Fs/2;
 %     Time = 0:(hopSize*(1/Fs)):(nSamples*(1/Fs))-(hopSize*(1/Fs));
-    Time = 1:nSamples;
+    Time = 1:count-1;
 %     imagesc(Time,Freq,(abs(S).^2))
     imagesc(Time,Freq,(20*log10(abs(S))))
     axis xy;view(0,90);
     xlabel('Time');
-    ylabel('Frequency (Hz)');
+    yTitle = sprintf('Frequency (Hz), Fs: %d',Fs);
+    ylabel(yTitle);
 end
 
 output_args = S;
+
+
+
 
 end
 

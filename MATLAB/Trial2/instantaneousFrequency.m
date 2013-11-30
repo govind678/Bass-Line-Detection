@@ -1,5 +1,6 @@
-function [ output_args ] = instantaneousFrequency( X, Fs )
+function [ output_args ] = instantaneousFrequency( X, Fs, plot )
 
+blockSize = (size(X,1) - 1) * 2;
 
 realSTFT = abs(X);
 imgSTFT  = unwrap(angle(X));
@@ -20,6 +21,19 @@ for t = 2:nBlocks
         instantFreq(w,t) = w + ( (a * (b - bD)) - (b * (a - aD)) / (a^2 + b^2) );
     end
 end
+
+
+if plot == 1
+    figure();
+    Freq = 0:Fs/blockSize:Fs/2;
+    Time = 1:nBlocks;
+    imagesc(Time,Freq,20*log10(abs(instantFreq)))
+    axis xy;view(0,90);
+    xlabel('Time');
+    yTitle = sprintf('Frequency (Hz), Fs: %d',Fs);
+    ylabel(yTitle);
+end
+
 
 output_args = instantFreq;
 

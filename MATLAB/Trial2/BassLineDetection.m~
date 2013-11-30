@@ -1,0 +1,100 @@
+% % Bass Line
+% 
+audio = '../../Audio/Seven.wav';
+
+[x, Fs] = wavread(audio);
+x = x(1:16*Fs,1);
+nSamples = length(x);
+
+
+FcL = 320;
+FcH = 32;
+[bl,al] = butter(2,2*FcL/Fs,'low');
+[bh,ah] = butter(2,2*FcH/Fs,'high');
+
+z = filter(bl,al,x);
+y = filter(bh,ah,z);
+
+[b,a] = butter(2,0.9999999999,'low');
+
+
+blockSize = 2048;
+hopSize = 256;
+
+nyq = blockSize/2 + 1;
+binSize = Fs / (2*nyq);
+
+FcBin = 1 + floor(FcL/binSize);  
+stftFreqs = ((1:FcBin)'.* binSize) - binSize;
+
+
+
+% Multirate Processing
+stft0 = shortTermFT(y,Fs,blockSize,hopSize,1);
+% inst0 = instantaneousFrequency(stft0,Fs,0);
+weight0 = frequencyWeighting(stft0,Fs,FcL,0);
+binSize0 = Fs / (2*nyq);
+
+
+x1 = y(1:2:end);
+y1 = filter(b,a,x1);
+stft1 = shortTermFT(y1,floor(Fs/(2^1)),blockSize,hopSize,1);
+% inst1 = instantaneousFrequency(stft1,floor(Fs/(2^1)),0);
+weight1 = frequencyWeighting(stft1,floor(Fs/(2^1)),floor(FcL/(2^1)),0);
+
+x2 = y1(1:2:end);
+y2 = filter(b,a,x2);
+stft2 = shortTermFT(y2,floor(Fs/(2^2)),blockSize,hopSize,1);
+% inst2 = instantaneousFrequency(stft1,floor(Fs/(2^2)),0);
+weight2 = frequencyWeighting(stft2,floor(Fs/(2^2)),floor(FcL/(2^2)),0);
+
+
+freqs2 = binS
+% x3 = y2(1:2:end);
+% y3 = filter(b,a,x3);
+% stft3 = shortTermFT(y1,floor(Fs/(2^3)),blockSize,hopSize,0);
+% % inst3 = instantaneousFrequency(stft1,floor(Fs/(2^3)),0);
+% weight3 = frequencyWeighting(stft1,floor(Fs/(2^3)),floor(Fc/(2^3)),1);
+% 
+% 
+% x4 = y3(1:2:end);
+% y4 = filter(b,a,x4);
+% stft4 = shortTermFT(y1,floor(Fs/(2^4)),blockSize,hopSize,0);
+% % inst4 = instantaneousFrequency(stft1,floor(Fs/(2^4)),0);
+% weight4 = frequencyWeighting(stft1,floor(Fs/(2^4)),floor(Fc/(2^4)),1);
+% 
+% 
+% x5 = y4(1:2:end);
+% y5 = filter(b,a,x5);
+% stft5 = shortTermFT(y1,floor(Fs/(2^5)),blockSize,hopSize,0);
+% % inst5 = instantaneousFrequency(stft1,floor(Fs/(2^5)),0);
+% weight5 = frequencyWeighting(stft1,floor(Fs/(2^5)),floor(Fc/(2^5)),1);
+% 
+% 
+% x6 = y5(1:2:end);
+% y6 = filter(b,a,x6);
+% stft6 = shortTermFT(y1,floor(Fs/(2^6)),blockSize,hopSize,0);
+% % inst6 = instantaneousFrequency(stft1,floor(Fs/(2^6)),0);
+% weight6 = frequencyWeighting(stft1,floor(Fs/(2^6)),floor(Fc/(2^6)),1);
+% 
+
+
+
+
+% stft = shortTermFT(y,Fs,blockSize,hopSize,0);
+% nBlocks = size(stft,2);
+
+
+
+
+
+
+% figure();
+% Freq = 0:binSize:FcBin*binSize;
+% Time = 1:nBlocks;
+% imagesc(Time,weightFreq,(20*log10(stft)))
+% axis xy;view(0,90);
+% xlabel('Time');
+% yTitle = sprintf('Frequency (Hz), Fs: %d',Fs);
+% ylabel(yTitle);
+
