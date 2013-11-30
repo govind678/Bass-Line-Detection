@@ -2,13 +2,13 @@
 
 function result = acorr_time(block)
 
-N = size(block,2);
+N = length(block);
 
-result = zeros(2*N-1,1);
+result = zeros(N-1,1);
 
-temp = [block zeros(1,N-1)];
+temp = [block; zeros(N-1, 1)];
 
-for i = 1:2*N-1
+for i = 1:N-1
     result(i) = sum(temp(i:i+N-1).*block(1:N));
 end
 
